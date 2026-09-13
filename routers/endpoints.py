@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from crud import get_endpoint, get_all_endpoints, create_endpoint, update_endpoint, delete_endpoint, get_latest_ping_per_endpoints
+from crud import get_endpoint, get_all_endpoints, create_endpoint, update_endpoint, delete_endpoint, get_kpi_stats
 from database import get_db
 from sqlalchemy.orm import Session
 from models import EndpointInput, EndpointResponse, PingResultResponse
@@ -7,9 +7,9 @@ from database_models import Endpoint, PingResult
 
 router = APIRouter(prefix="/endpoints", tags=["endpoints"])
 
-@router.get("/latest", response_model=list[PingResultResponse])
-def latestPings(db : Session = Depends(get_db)):
-    return get_latest_ping_per_endpoints(db)
+@router.get("/kpi")
+def get_kpi_data(db : Session = Depends(get_db)):
+    return get_kpi_stats(db)
 
 @router.get("/", response_model = list[EndpointResponse])
 def getAllEndpoint(db : Session = Depends(get_db)):

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from models import EndpointInput, EndpointResponse, PingResultResponse
 from fastapi import HTTPException, APIRouter
 from datetime import datetime
-from sqlalchemy import func, and_, between
+from sqlalchemy import func, and_
 
 def get_endpoint(db : Session, id : int):
     db_endpoint_response = db.query(Endpoint).filter(Endpoint.id == id).first()
@@ -59,6 +59,14 @@ def get_latest_ping_per_endpoints(db : Session):
     latest_pings = db.query(PingResult).join(subquery, and_(PingResult.endpoint_id == subquery.c.endpoint_id, PingResult.checked_at == subquery.c.latest_time)).all()
     return latest_pings
 
+def get_incidents_count(db : Session):
+    pings = get_latest_ping_per_endpoints(db)
+    count = 0
+    for i in pings:
+        if(i.status_code > 299 or i.status_code <200):
+            count = count + 1
+    return count
+
 def get_uptime_percentage(db : Session):
     total_count = db.query(func.count(PingResult.id)).scalar()
     successful_pings_count = db.query(func.count(PingResult.id)).filter(PingResult.status_code.between(200,299)).scalar()
@@ -66,3 +74,19 @@ def get_uptime_percentage(db : Session):
         return 0
     uptime_percent = (successful_pings_count / total_count) * 100
     return uptime_percent
+
+def get_avg_response_time(db : Session):
+    avg_response_time = db.query(func.avg(PingResult.response_time)).scalar()
+    if avg_response_time is None:
+        return 0
+    return avg_response_time
+
+def get_kpi_stats(db : Session):
+    incidents = get_incidents_count(db)
+    uptime_percentage = get_uptime_percentage(db)
+    avg_response_time = get_avg_response_time(db)
+    return {
+        "incidents" : incidents,
+        "uptime_percentage" : uptime_percentage,
+        "avg_response_time" : avg_response_time
+    }
