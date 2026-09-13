@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from models import EndpointInput, EndpointResponse, PingResultResponse
 from fastapi import HTTPException, APIRouter
 from datetime import datetime
-from sqlalchemy import func, and_
+from sqlalchemy import func, and_, between
 
 def get_endpoint(db : Session, id : int):
     db_endpoint_response = db.query(Endpoint).filter(Endpoint.id == id).first()
@@ -58,3 +58,7 @@ def get_latest_ping_per_endpoints(db : Session):
     subquery = db.query(PingResult.endpoint_id, func.max(PingResult.checked_at).label("latest_time")).group_by(PingResult.endpoint_id).subquery()
     latest_pings = db.query(PingResult).join(subquery, and_(PingResult.endpoint_id == subquery.c.endpoint_id, PingResult.checked_at == subquery.c.latest_time)).all()
     return latest_pings
+
+def get_uptime_percentage(db : Session):
+    total_count = db.query(func.count(PingResult.id)).scalar()
+    successful_pings = db.query(func.count(PingResult.id)).filter(PingResult.status_code.between(200,299)).scalar()
