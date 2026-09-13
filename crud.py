@@ -61,4 +61,8 @@ def get_latest_ping_per_endpoints(db : Session):
 
 def get_uptime_percentage(db : Session):
     total_count = db.query(func.count(PingResult.id)).scalar()
-    successful_pings = db.query(func.count(PingResult.id)).filter(PingResult.status_code.between(200,299)).scalar()
+    successful_pings_count = db.query(func.count(PingResult.id)).filter(PingResult.status_code.between(200,299)).scalar()
+    if total_count == 0:
+        return 0
+    uptime_percent = (successful_pings_count / total_count) * 100
+    return uptime_percent
