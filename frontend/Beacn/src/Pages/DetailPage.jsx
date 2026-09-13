@@ -53,7 +53,7 @@ export default function DetailPage(){
                                 let date = new Date(value);
                                 return date.toLocaleString([], { month: "short", day: "numeric" });
                             }}
-                            interval="preserveStartEnd"
+                            
                             tick={{ fill: "var(--text-secondary)", fontSize: 11 }}
                         />
                         <YAxis
