@@ -15,6 +15,13 @@ export default function App() {
           className={`nav-icon ${location.pathname === "/" ? "nav-icon--active" : ""}`}
           title="Dashboard"
         >
+          <img 
+            src="../public/beacn.svg" 
+            alt="Beacn" 
+            width="24" 
+            height="24" 
+            style={{ display: 'block' }}
+          />
         </Link>
       </nav>
 

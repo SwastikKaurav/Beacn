@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%">
+  <!-- Transparent canvas: no background rect -->
+
+  <!-- Outer Radar Pulse (Warm Amber) -->
+  <path 
+    d="M 5.5 11 A 12.5 12.5 0 0 1 26.5 11" 
+    fill="none" 
+    stroke="#F59E0B" 
+    stroke-width="2.2" 
+    stroke-linecap="round" 
+    opacity="0.35" 
+  />
+
+  <!-- Inner Radar Pulse -->
+  <path 
+    d="M 9.5 15 A 7.5 7.5 0 0 1 22.5 15" 
+    fill="none" 
+    stroke="#F59E0B" 
+    stroke-width="2.2" 
+    stroke-linecap="round" 
+    opacity="0.8" 
+  />
+
+  <!-- Core Status Emitter (Bright Gold Ping) -->
+  <circle 
+    cx="16" 
+    cy="18.5" 
+    r="2.75" 
+    fill="#FBBF24" 
+  />
+
+  <!-- Minimalist Beacon Base -->
+  <polygon 
+    points="14.8,22 17.2,22 19,27 13,27" 
+    fill="#F59E0B" 
+    opacity="0.6" 
+  />
+  <line 
+    x1="11.5" 
+    y1="28.5" 
+    x2="20.5" 
+    y2="28.5" 
+    stroke="#F59E0B" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    opacity="0.8" 
+  />
+</svg>
