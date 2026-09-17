@@ -20,3 +20,13 @@ class PingResultResponse(BaseModel):
     status_code:int | None
     response_time:float | None
     checked_at:datetime
+
+class UserInput(BaseModel):
+    email:str
+    password:str
+
+class UserResponse(BaseModel):
+    model_config = {"from_attributes": True}
+    id:int
+    email:str
+    created_at:datetime

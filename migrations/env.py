@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 import os
 
 from database import Base
-from database_models import Endpoint, PingResult
+from database_models import User, Endpoint, PingResult
 
 load_dotenv()
 
