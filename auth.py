@@ -17,7 +17,7 @@ def hash_password(password:str):
     hash = ph.hash(password)
     return hash
 
-def verify_password(password:str,hashed_password:str):
+def verify_password(password:str, hashed_password:str):
     try:
         ph.verify(hashed_password, password)
         return True
