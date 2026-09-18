@@ -30,16 +30,9 @@ def create_access_token(user_id : int):
     return token
 
 def verify_access_token(token: str):
-    try:
         payload = decode(
             token,
             secret_key,
             algorithms=["HS256"]
         )
         return payload
-
-    except ExpiredSignatureError:
-        return "Token expired"
-
-    except InvalidTokenError:
-        return "Invalid token"

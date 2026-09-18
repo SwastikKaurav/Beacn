@@ -69,7 +69,6 @@
   color: var(--status-down);
 }
 
-/* shared button styles used across list + modals */
 .btn {
   border: 1px solid var(--border-default);
   background: var(--bg-elevated);
