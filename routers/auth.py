@@ -5,7 +5,7 @@ from database import get_db
 from models import UserInput, UserResponse
 from database_models import User
 
-router = APIRouter()
+router = APIRouter(tags=["auth"])
 
 @router.post("/auth/signup", response_model=UserResponse)
 def sign_up(user : UserInput, db : Session = Depends(get_db)):
@@ -26,7 +26,7 @@ def log_in(user : UserInput, db : Session = Depends(get_db)):
     if dbquery is None:
         raise HTTPException(status_code=400, detail="Invalid credentials")
     stored_hashed_password = dbquery.hashed_password
-    verification = verify_password(stored_hashed_password, user.password)
+    verification = verify_password(user.password, stored_hashed_password)
     if verification:
         token = create_access_token(dbquery.id)
         return {"access_token":token, "token_type":"bearer"}
