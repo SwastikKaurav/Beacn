@@ -9,10 +9,11 @@ import "./App.css";
 
 export default function App() {
   let location = useLocation();
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/signup";
 
   return (
     <div className="app-shell">
-      <nav className="nav-rail">
+      {!isAuthPage && <nav className="nav-rail">
         <Link
           to="/"
           className={`nav-icon ${location.pathname === "/" ? "nav-icon--active" : ""}`}
@@ -26,13 +27,14 @@ export default function App() {
             style={{ display: 'block' }}
           />
         </Link>
-      </nav>
+      </nav>}
+      
 
       <div className="app-main">
-        <header className="topbar">
+        {!isAuthPage && <header className="topbar">
           <span className="topbar-brand">Beacn</span>
-        </header>
-
+        </header>}
+        
         <main className="content">
           <Routes>
             <Route path="/signup" element={<Signup/>}/>
