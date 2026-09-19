@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../api/endpoints";
+import "./Auth.css";
 
 export default function Login(){
     let [user, setUser] = useState({});
@@ -28,21 +29,37 @@ export default function Login(){
         }
     }
 
-    
     return(
-        <>
-        <form onSubmit={handleSubmit}>
-            <label>Email</label>
-            <input type="email" value={user.email} onChange={handleEmail}/>
+        <div className="auth-page">
+            <div className="auth-card">
+                <div className="auth-brand">
+                    <img src="../public/beacn.svg" alt="Beacn" />
+                    <span>Beacn</span>
+                </div>
 
-            <label>Password</label>
-            <input type="password" value={user.password} onChange={handlePassword}/>
+                <h1 className="auth-title">Welcome back</h1>
+                <p className="auth-subtitle">Log in to view your monitored endpoints.</p>
 
-            <button type="submit">Login</button>
+                <form className="auth-form" onSubmit={handleSubmit}>
+                    <div className="auth-field">
+                        <label>Email</label>
+                        <input type="email" placeholder="you@example.com" value={user.email || ""} onChange={handleEmail}/>
+                    </div>
 
-            <p>Don't have an account? </p> <Link to={"/signup"}>Sign up</Link>
-        </form>
-        {error && <p>{error}</p>}
-        </>
+                    <div className="auth-field">
+                        <label>Password</label>
+                        <input type="password" placeholder="••••••••" value={user.password || ""} onChange={handlePassword}/>
+                    </div>
+
+                    <button className="auth-submit" type="submit">Log in</button>
+                </form>
+
+                {error && <p className="auth-error">{error}</p>}
+
+                <p className="auth-switch">
+                    Don't have an account? <Link to="/signup">Sign up</Link>
+                </p>
+            </div>
+        </div>
     )
 }
