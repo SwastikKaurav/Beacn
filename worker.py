@@ -2,12 +2,12 @@ import asyncio
 import requests
 from datetime import datetime
 from database import SessionLocal
-from crud import get_all_endpoints, create_ping_result
+from crud import get_all_endpoints_worker, create_ping_result
 
 async def ping_all_endpoints_infinitely():
     while True:
         db = SessionLocal()
-        endpoints = get_all_endpoints(db)
+        endpoints = get_all_endpoints_worker(db)
         for endpoint in endpoints:
             try:
                 response = requests.get(endpoint.url, timeout=10)

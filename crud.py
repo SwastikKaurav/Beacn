@@ -6,6 +6,10 @@ from fastapi import HTTPException, APIRouter
 from datetime import datetime
 from sqlalchemy import func, and_
 
+def get_all_endpoints_worker(db : Session):
+    db_endpoints = db.query(Endpoint).all()
+    return db_endpoints
+
 def get_endpoint(db : Session, id : int, user_id : int):
     db_endpoint_response = db.query(Endpoint).filter(Endpoint.id == id, Endpoint.user_id == user_id).first()
     if db_endpoint_response is None:
