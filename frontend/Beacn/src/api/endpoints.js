@@ -9,6 +9,10 @@ async function apiFetch(url, options = {}){
         let data = await response.json();
         return data;
     }
+    else if(response.status == 401){
+        localStorage.removeItem("access_token")
+        window.location.replace("/login");
+    }
     else{
         const errorData = await response.json()
         throw new Error(errorData.detail)
