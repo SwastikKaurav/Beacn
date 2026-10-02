@@ -2,7 +2,7 @@ import asyncio
 import requests
 from datetime import datetime
 from database import SessionLocal
-from crud import get_all_endpoints_worker, create_ping_result
+from crud import get_all_endpoints_worker, create_ping_result, send_email_alerts
 
 async def ping_all_endpoints_infinitely():
     while True:
@@ -15,13 +15,15 @@ async def ping_all_endpoints_infinitely():
                 response_time = response.elapsed.total_seconds()   
                 checked_at = datetime.now()
                 create_ping_result(db, endpoint.id, status_code, response_time, checked_at)
+                send_email_alerts(db, endpoint)
                 
             except requests.exceptions.RequestException as e:
                 status_code = 0
                 response_time = None
                 checked_at = datetime.now()
                 create_ping_result(db, endpoint.id, status_code, response_time, checked_at)
-            
+                send_email_alerts(db, endpoint)
+
         db.close()    
         await asyncio.sleep(300)
 
