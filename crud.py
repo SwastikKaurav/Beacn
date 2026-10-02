@@ -96,27 +96,47 @@ def get_kpi_stats(db : Session, user_id : int):
         "avg_response_time" : avg_response_time
     }
 
-def send_email_alerts(db : Session, endpoint : Endpoint):
+def failed(ping : PingResult): 
+    return ping.status_code > 299 or ping.status_code < 200
+
+def send_email_alerts(db: Session, endpoint: Endpoint):
     latest_pings = db.query(PingResult).filter(PingResult.endpoint_id == endpoint.id).order_by(PingResult.checked_at.desc()).limit(3).all()
-    p0= latest_pings[0]
-    p1= latest_pings[1]
-    p2= latest_pings[2]
+
+    down_subject = f"Beacn Alert: {endpoint.name} is DOWN"
+    up_subject = f"Beacn Alert: {endpoint.name} is back UP"
+
+    if len(latest_pings) == 2:
+        p0, p1 = latest_pings[0], latest_pings[1]
+        down_email = f"""URL: {endpoint.url}
+                    Last status code: {p0.status_code}
+                    Response time: {p0.response_time}
+                    Detected at: {p0.checked_at}"""
+        if failed(p0) and failed(p1):
+            send_email(endpoint.user.email, down_subject, down_email)
+        return
+
+    if len(latest_pings) < 2:
+        return
+
+    p0, p1, p2 = latest_pings[0], latest_pings[1], latest_pings[2]
 
     down_subject = f"Beacn Alert: {endpoint.name} is DOWN"
 
-    down_email = 
+    down_email = f"""URL: {endpoint.url}
+                Last status code: {p0.status_code}
+                Response time: {p0.response_time}
+                Detected at: {p0.checked_at}"""
 
     up_subject = f"Beacn Alert: {endpoint.name} is back UP"
 
-    up_email = 
+    up_email = f"Detected at: {p0.checked_at}"
 
-    if (p0.status_code > 299 and p0.status_code < 200):
-        if(p1.status_code > 299 and p1.status_code < 200):
+    if (failed(p0) and failed(p1)):
+        if(not failed(p2)):
             send_email(endpoint.user.email, down_subject, down_email)
 
-    else:
-        if(p1.status_code > 299 and p1.status_code < 200):
-            if(p2.status_code > 299 and p2.status_code < 200):
+    elif (not failed(p0)):
+        if(failed(p1) and failed(p2)):
                 send_email(endpoint.user.email, up_subject, up_email)
 
 
