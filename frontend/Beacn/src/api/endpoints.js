@@ -1,3 +1,5 @@
+const API_URL = import.meta.env.VITE_API_URL
+
 async function apiFetch(url, options = {}){
     const token = localStorage.getItem("access_token");
     const headers = {
@@ -20,19 +22,19 @@ async function apiFetch(url, options = {}){
 }
 
 export async function getEndpoints(){
-    return apiFetch("http://localhost:8000/endpoints/")
+    return apiFetch(`${API_URL}/endpoints/`)
 }
 
 export async function getPings(endpoint_id){
-    return apiFetch(`http://localhost:8000/endpoints/${endpoint_id}/pings`)
+    return apiFetch(`${API_URL}/endpoints/${endpoint_id}/pings`)
 }
 
 export async function getEndpointById(endpoint_id){
-    return apiFetch(`http://localhost:8000/endpoints/${endpoint_id}`)
+    return apiFetch(`${API_URL}/endpoints/${endpoint_id}`)
 }
 
 export async function createEndpoint(data){
-    return apiFetch("http://localhost:8000/endpoints/", {
+    return apiFetch(`${API_URL}/endpoints/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
@@ -40,7 +42,7 @@ export async function createEndpoint(data){
 }
 
 export async function updateEndpoint(endpoint_id, data){
-    return apiFetch(`http://localhost:8000/endpoints/${endpoint_id}`, {
+    return apiFetch(`${API_URL}/endpoints/${endpoint_id}`, {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
@@ -48,18 +50,18 @@ export async function updateEndpoint(endpoint_id, data){
 }
 
 export async function deleteEndpoint(endpoint_id){
-    return apiFetch(`http://localhost:8000/endpoints/${endpoint_id}`,{
+    return apiFetch(`${API_URL}/endpoints/${endpoint_id}`,{
         method: "DELETE"
     })
 }
 
 export async function getKpiStats(){
-    return apiFetch("http://localhost:8000/endpoints/kpi")
+    return apiFetch(`${API_URL}/endpoints/kpi`)
 }
 
 export async function login(email, password){
     let data = {"email":email, "password":password}
-    return apiFetch("http://localhost:8000/auth/login",{
+    return apiFetch(`${API_URL}/auth/login`,{
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
@@ -68,7 +70,7 @@ export async function login(email, password){
 
 export async function signup(email, password){
     let data = {"email": email, "password": password}
-    return apiFetch("http://localhost:8000/auth/signup",{
+    return apiFetch(`${API_URL}/auth/signup`,{
         method: "POST",
         headers: {"Content-type": "application/json"},
         body: JSON.stringify(data)
