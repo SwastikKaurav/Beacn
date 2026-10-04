@@ -104,7 +104,7 @@ export default function DetailPage(){
                                     <td className="mono">
                                         {ping.response_time != null ? `${(ping.response_time * 1000).toFixed(0)}ms` : "—"}
                                     </td>
-                                    <td className="mono col-url">{new Date(ping.checked_at).toLocaleString()}</td>
+                                    <td className="mono col-url">{new Date(ping.checked_at).toLocaleString()} UTC</td>
                                 </tr>
                             );
                         })}
