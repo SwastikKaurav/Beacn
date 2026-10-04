@@ -12,6 +12,7 @@ export default function DetailPage(){
 
     let { id } = useParams();
     useEffect(()=>{
+        let intervalId;
         async function fetchPings(){
             try{
                 let response_endpoint = await getEndpointById(id);
@@ -20,14 +21,25 @@ export default function DetailPage(){
                 let response = await getPings(id);
                 setLoading(false);
                 setPings(response);
+
+                return response_endpoint;
             }
             catch (e){
                 setError(true);
                 setLoading(false);
             }
         }
-        fetchPings();
-    },[])
+
+        async function startPolling(){
+            const response_endpoint = await fetchPings();
+            if(response_endpoint){
+                intervalId = setInterval(fetchPings, response_endpoint.ping_interval * 1000);
+            }
+        }
+
+        startPolling();
+        return () => clearInterval(intervalId);
+    },[id])
 
     if (loading) return <p className="state-msg">Loading…</p>;
     if (error) return <p className="state-msg state-msg--error">Something went wrong</p>;
