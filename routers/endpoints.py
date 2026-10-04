@@ -6,6 +6,8 @@ from models import EndpointInput, EndpointResponse, PingResultResponse
 from database_models import Endpoint, PingResult
 from auth import get_current_user
 from database_models import User
+import asyncio
+from worker import ping_single_endpoint_forever
 
 router = APIRouter(prefix="/endpoints", tags=["endpoints"])
 
@@ -23,7 +25,9 @@ def getEndpoint(endpoint_id : int, db : Session = Depends(get_db), current_user 
 
 @router.post("/", response_model = EndpointResponse)
 def createEndpoint(endpoint_input : EndpointInput, db : Session = Depends(get_db), current_user : User = Depends(get_current_user)):
-    return create_endpoint(db, endpoint_input, current_user.id)
+    created_enpoint = create_endpoint(db, endpoint_input, current_user.id)
+    asyncio.create_task(ping_single_endpoint_forever(created_enpoint.id))
+    return created_enpoint
 
 @router.put("/{endpoint_id}", response_model = EndpointResponse)
 def updateEndpoint(endpoint_input : EndpointInput, endpoint_id : int ,db : Session = Depends(get_db), current_user : User = Depends(get_current_user)):
