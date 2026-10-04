@@ -89,5 +89,5 @@ On first use, sign up for an account at `/signup` — you'll be logged in automa
 
 - ~~Authentication — protected routes so monitoring data is scoped per user~~ ✅ Done
 - Per-endpoint uptime % and response-time stats on the detail page (currently only computed as a system-wide aggregate per user)
-- Configurable alerting when an endpoint goes down
+- ~~Configurable alerting when an endpoint goes down~~ ✅ Done
 - Sparkline trend indicators in the dashboard table
