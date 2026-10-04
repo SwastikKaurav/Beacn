@@ -110,7 +110,7 @@ def send_email_alerts(db: Session, endpoint: Endpoint):
         down_email = f"""URL: {endpoint.url}
                         Last status code: {p0.status_code}
                         Response time: {p0.response_time}
-                        Detected at: {p0.checked_at.strftime("%Y-%m-%d %H:%M:%S %p")}"""
+                        Detected at: {p0.checked_at.strftime("%Y-%m-%d %H:%M:%S %p IST")}"""
         if failed(p0) and failed(p1):
             send_email(endpoint.user.email, down_subject, down_email)
         return
@@ -125,11 +125,11 @@ def send_email_alerts(db: Session, endpoint: Endpoint):
     down_email = f"""URL: {endpoint.url}
                     Last status code: {p0.status_code}
                     Response time: {p0.response_time}
-                    Detected at: {p0.checked_at.strftime("%Y-%m-%d %H:%M:%S %p")}"""
+                    Detected at: {p0.checked_at.strftime("%Y-%m-%d %H:%M:%S %p IST")}"""
 
     up_subject = f"Beacn Alert: {endpoint.name} is back UP"
 
-    up_email = f"Detected at: {p0.checked_at.strftime("%Y-%m-%d %H:%M:%S %p")}"
+    up_email = f"Detected at: {p0.checked_at.strftime("%Y-%m-%d %H:%M:%S %p IST")}"
 
     if (failed(p0) and failed(p1)):
         if(not failed(p2)):
@@ -138,7 +138,6 @@ def send_email_alerts(db: Session, endpoint: Endpoint):
     elif (not failed(p0)):
         if(failed(p1) and failed(p2)):
                 send_email(endpoint.user.email, up_subject, up_email)
-
 
 
 
