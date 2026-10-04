@@ -33,7 +33,7 @@ export default function Login(){
         <div className="auth-page">
             <div className="auth-card">
                 <div className="auth-brand">
-                    <img src="/beacn.svg" alt="Beacn" />
+                    <img src="/Beacn.svg" alt="Beacn" />
                     <span>Beacn</span>
                 </div>
 

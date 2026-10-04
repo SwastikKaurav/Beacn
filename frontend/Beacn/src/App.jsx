@@ -20,7 +20,7 @@ export default function App() {
           title="Dashboard"
         >
           <img 
-            src="/beacn.svg" 
+            src="/Beacn.svg" 
             alt="Beacn" 
             width="24" 
             height="24" 
