@@ -1,5 +1,5 @@
 import EndpointList from "../Components/EndpointList";
-import NewEndpointModal from "../Components/newEndpointModal";
+import NewEndpointModal from "../Components/NewEndpointModal";
 import { useState, useEffect } from "react";
 import { getEndpoints, getKpiStats } from "../api/endpoints";
 import "./Dashboard.css";
