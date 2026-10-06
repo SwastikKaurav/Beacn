@@ -3,7 +3,7 @@ from database import SessionLocal
 from sqlalchemy.orm import Session
 from models import EndpointInput, EndpointResponse, PingResultResponse
 from fastapi import HTTPException, APIRouter
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import func, and_
 from email_utils import send_email
 
@@ -56,7 +56,8 @@ def create_ping_result(db: Session, id: int, status_code: int, response_time: fl
     return db_ping_result
 
 def get_pings_of_endpoint(db : Session, endpoint_id : int, user_id : int):
-    db_ping_result =  db.query(PingResult).join(Endpoint).filter(PingResult.endpoint_id == endpoint_id, Endpoint.user_id == user_id).order_by(PingResult.checked_at).all()
+    since = datetime.now(timezone.utc) - timedelta(hours=168) #1 week
+    db_ping_result =  db.query(PingResult).join(Endpoint).filter(PingResult.endpoint_id == endpoint_id, Endpoint.user_id == user_id, PingResult.checked_at > since).order_by(PingResult.checked_at).all()
     return db_ping_result
 
 def get_latest_ping_per_endpoints(db : Session, user_id : int):
