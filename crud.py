@@ -73,13 +73,16 @@ def get_incidents_count(db : Session, user_id : int):
             count = count + 1
     return count
 
-def get_uptime_percentage(db : Session, user_id : int):
-    total_count = db.query(func.count(PingResult.id)).join(Endpoint, PingResult.endpoint_id == Endpoint.id).filter(Endpoint.user_id == user_id).scalar()
-    successful_pings_count = db.query(func.count(PingResult.id)).join(Endpoint, PingResult.endpoint_id == Endpoint.id).filter(PingResult.status_code.between(200,299), Endpoint.user_id == user_id).scalar()
+def get_uptime_percentage(db: Session, user_id: int, hours: int = 24):
+    since = datetime.now(timezone.utc) - timedelta(hours=hours)
+    base = (db.query(func.count(PingResult.id))
+              .join(Endpoint, PingResult.endpoint_id == Endpoint.id)
+              .filter(Endpoint.user_id == user_id, PingResult.checked_at > since))
+    total_count = base.scalar()
+    successful_count = base.filter(PingResult.status_code.between(200, 299)).scalar()
     if total_count == 0:
         return 0
-    uptime_percent = (successful_pings_count / total_count) * 100
-    return uptime_percent
+    return (successful_count / total_count) * 100
 
 def get_avg_response_time(db : Session, user_id : int):
     avg_response_time = db.query(func.avg(PingResult.response_time)).join(Endpoint, PingResult.endpoint_id == Endpoint.id).filter(Endpoint.user_id == user_id).scalar()
