@@ -72,7 +72,7 @@ export default function Dashboard(){
                 <div className="kpi-card">
                     <span className="kpi-label">p95 latency (24 hrs)</span>
                     <span className="kpi-value mono">
-                        {kpiStats.avg_response_time != null ? `${(kpiStats.p95_latency * 1000).toFixed(0)}ms` : "—"}
+                        {kpiStats.p95_latency != null ? `${(kpiStats.p95_latency * 1000).toFixed(0)}ms` : "—"}
                     </span>
                 </div>
             </div>
