@@ -93,14 +93,24 @@ def get_avg_response_time(db : Session, user_id : int):
         return 0
     return avg_response_time
 
+def get_p95_latency(db: Session, user_id: int, hours: int = 24):
+    since = datetime.now(timezone.utc) - timedelta(hours=hours)
+    p95 = (
+        db.query(func.percentile_cont(0.95).within_group(PingResult.response_time))
+        .join(Endpoint, PingResult.endpoint_id == Endpoint.id)
+        .filter(Endpoint.user_id == user_id, PingResult.checked_at > since)
+        .scalar()
+    )
+    return p95 or 0
+
 def get_kpi_stats(db : Session, user_id : int):
     incidents = get_incidents_count(db, user_id)
     uptime_percentage = get_uptime_percentage(db, user_id)
-    avg_response_time = get_avg_response_time(db, user_id)
+    p95_latency = get_p95_latency(db, user_id)
     return {
         "incidents" : incidents,
         "uptime_percentage" : uptime_percentage,
-        "avg_response_time" : avg_response_time
+        "p95_latency" : p95_latency
     }
 
 def failed(ping : PingResult): 
